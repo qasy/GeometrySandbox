@@ -3,6 +3,8 @@
 
 #include "BaseGeometryActor.h"
 
+DEFINE_LOG_CATEGORY_STATIC(LogBaseGeometry, All, All)
+
 // Sets default values
 ABaseGeometryActor::ABaseGeometryActor()
 {
