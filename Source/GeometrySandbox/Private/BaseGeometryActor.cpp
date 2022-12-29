@@ -6,7 +6,7 @@
 // Sets default values
 ABaseGeometryActor::ABaseGeometryActor()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 }
@@ -15,7 +15,9 @@ ABaseGeometryActor::ABaseGeometryActor()
 void ABaseGeometryActor::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	// printTypes();
+
 }
 
 // Called every frame
@@ -23,5 +25,20 @@ void ABaseGeometryActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ABaseGeometryActor::printTypes()
+{
+
+	int WeaponsNum = 4;
+	int KillsNum = 7;
+	float Health = 34.12312;
+	bool isDead = false;
+	bool HasWeapon = true;
+
+	UE_LOG(LogTemp, Display, TEXT("Weapons num: %d, kills num: %i"), WeaponsNum, KillsNum);
+	UE_LOG(LogTemp, Display, TEXT("Health: %.2f"), Health);
+	UE_LOG(LogTemp, Display, TEXT("IsDead: %d"), isDead);
+	UE_LOG(LogTemp, Display, TEXT("Has weapon: %d"), static_cast<int>(HasWeapon));
 }
 
