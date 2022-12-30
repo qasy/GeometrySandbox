@@ -32,6 +32,9 @@ struct FGeometryData
 	UPROPERTY(EditAnywhere, Category = "Design")
 	FLinearColor Color = FLinearColor::Black;
 
+	UPROPERTY(EditAnywhere, Category = "Design")
+	float TimerRate = 3.0f;
+
 };
 
 UCLASS()
@@ -54,16 +57,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-private:
-	FVector InitialLocation;
-	FVector InitialScale3D;
-
-	void PrintTypes();
-	void PrintStringTypes();
-	void PrintTransform();
-	void HandleMovement();
-
-	void SetColor(const FLinearColor& Color);
 
 protected:
 
@@ -84,5 +77,22 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, Category = "Weapon")
 	bool HasWeapon = true;
+
+private:
+	FVector InitialLocation;
+	FVector InitialScale3D;
+	FTimerHandle TimerHandle;
+
+	const int32 MaxTimerCount = 5;
+	int32 TimerCount = 0;
+
+	void PrintTypes();
+	void PrintStringTypes();
+	void PrintTransform();
+	void HandleMovement();
+
+	void SetColor(const FLinearColor& Color);
+
+	void OnTimerFired();
 
 };
