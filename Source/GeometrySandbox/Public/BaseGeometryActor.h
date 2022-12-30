@@ -8,11 +8,34 @@
 
 #include "BaseGeometryActor.generated.h"
 
+UENUM(BlueprintType)
+enum class EMovementType : uint8
+{
+	Sin,
+	Static
+};
+
+USTRUCT(BlueprintType)
+struct FGeometryData
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditAnywhere, Category = "Movement")
+	float Amplitude = 50.0f;
+
+	UPROPERTY(EditAnywhere, Category = "Movement")
+	float Frequency = 50.0f;
+
+	UPROPERTY(EditAnywhere, Category = "Movement")
+	EMovementType MoveType = EMovementType::Static;
+
+};
+
 UCLASS()
 class GEOMETRYSANDBOX_API ABaseGeometryActor : public AActor
 {
-	GENERATED_BODY()
-	
+	GENERATED_BODY()	
+
 public:	
 	// Sets default values for this actor's properties
 	ABaseGeometryActor();
@@ -32,17 +55,15 @@ private:
 	FVector InitialLocation;
 	FVector InitialScale3D;
 
-	void printTypes();
-	void printStringTypes();
-	void printTransform();
+	void PrintTypes();
+	void PrintStringTypes();
+	void PrintTransform();
+	void HandleMovement();
 
 protected:
 
-	UPROPERTY(EditAnywhere, Category = "Movement")
-	float Amplitude = 50.0f;
-	
-	UPROPERTY(EditAnywhere, Category = "Movement")
-	float Frequency = 50.0f;
+	UPROPERTY(EditAnywhere, Category = "Geometry Data")
+	FGeometryData GeometryData;
 
 	UPROPERTY(EditAnywhere, Category = "Weapon")
 	int32 WeaponsNum = 4;

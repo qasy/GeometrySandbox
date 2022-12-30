@@ -23,10 +23,10 @@ void ABaseGeometryActor::BeginPlay()
 	Super::BeginPlay();
 	InitialLocation = GetActorLocation();
 	InitialScale3D = GetActorScale3D();
-	
-	//printTransform();	
-	//printStringTypes();	
-	//printTypes();
+
+	// PrintTransform();	
+	// PrintStringTypes();	
+	// PrintTypes();
 
 }
 
@@ -35,24 +35,11 @@ void ABaseGeometryActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	FVector CurrentLocation = GetActorLocation();
-	FVector CurrentScale3D = GetActorScale3D();
-
-	float time = GetWorld()->GetTimeSeconds();
+	HandleMovement();
 	
-	CurrentLocation.Z = InitialLocation.Z + Amplitude * FMath::Sin(Frequency * time);
-	CurrentScale3D = InitialScale3D + (Amplitude / 10.0f) * FMath::Cos((Frequency / 10.0f) * time);
-	
-	SetActorLocation(CurrentLocation);
-	SetActorScale3D(CurrentScale3D);
-
-	
-	//FVector NewLocation
-
-
 }
 
-void ABaseGeometryActor::printTypes()
+void ABaseGeometryActor::PrintTypes()
 {
 	UE_LOG(LogBaseGeometry, Warning, TEXT("Actor name: %s"), *GetName());
 	UE_LOG(LogBaseGeometry, Warning, TEXT("Weapons num: %d, kills num: %i"), WeaponsNum, KillsNum);
@@ -61,7 +48,7 @@ void ABaseGeometryActor::printTypes()
 	UE_LOG(LogBaseGeometry, Warning, TEXT("Has weapon: %d"), static_cast<int>(HasWeapon));
 }
 
-void ABaseGeometryActor::printStringTypes()
+void ABaseGeometryActor::PrintStringTypes()
 {
 	FString Name = "John Connor";
 	UE_LOG(LogBaseGeometry, Display, TEXT("Name: %s"), *Name);
@@ -78,7 +65,7 @@ void ABaseGeometryActor::printStringTypes()
 
 }
 
-void ABaseGeometryActor::printTransform()
+void ABaseGeometryActor::PrintTransform()
 {
 	FTransform Transform = GetActorTransform();
 	FVector Location = Transform.GetLocation();
@@ -93,4 +80,29 @@ void ABaseGeometryActor::printTransform()
 
 	UE_LOG(LogBaseGeometry, Error, TEXT("Human transform %s"), *Transform.ToHumanReadableString());
 
+}
+
+void ABaseGeometryActor::HandleMovement()
+{
+	switch (GeometryData.MoveType)
+	{
+		case EMovementType::Sin:
+		{
+			FVector CurrentLocation = GetActorLocation();
+			FVector CurrentScale3D = GetActorScale3D();
+
+			float Time = GetWorld()->GetTimeSeconds();
+
+			CurrentLocation.Z = InitialLocation.Z + GeometryData.Amplitude * FMath::Sin(GeometryData.Frequency * Time);
+			CurrentScale3D = InitialScale3D + (GeometryData.Amplitude / 10.0f) * FMath::Cos((GeometryData.Frequency / 10.0f) * Time);
+
+			SetActorLocation(CurrentLocation);
+			SetActorScale3D(CurrentScale3D);
+		}
+		break;
+
+		case EMovementType::Static: break;
+
+		default: break;
+	}
 }
