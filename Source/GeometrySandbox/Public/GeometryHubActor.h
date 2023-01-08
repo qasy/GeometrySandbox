@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "BaseGeometryActor.h"
 #include "GeometryHubActor.generated.h"
 
 UCLASS()
@@ -20,8 +21,13 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere)
+	TSubclassOf<ABaseGeometryActor> GeometryClass;
 
+	UPROPERTY(EditAnywhere)
+	UClass* Class;
 
+	UPROPERTY(EditAnywhere)
+	ABaseGeometryActor* GeometryObject;
 
 public:	
 	// Called every frame

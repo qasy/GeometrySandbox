@@ -105,10 +105,10 @@ void ABaseGeometryActor::HandleMovement()
 			float Time = GetWorld()->GetTimeSeconds();
 
 			CurrentLocation.Z = InitialLocation.Z + GeometryData.Amplitude * FMath::Sin(GeometryData.Frequency * Time);
-			CurrentScale3D = InitialScale3D + (GeometryData.Amplitude / 10.0f) * FMath::Cos((GeometryData.Frequency / 10.0f) * Time);
+			// CurrentScale3D = InitialScale3D + (GeometryData.Amplitude / 10.0f) * FMath::Cos((GeometryData.Frequency / 10.0f) * Time);
 
 			SetActorLocation(CurrentLocation);
-			SetActorScale3D(CurrentScale3D);
+			// SetActorScale3D(CurrentScale3D);
 		}
 		break;
 
@@ -130,12 +130,11 @@ void ABaseGeometryActor::SetColor(const FLinearColor& Color)
 
 void ABaseGeometryActor::OnTimerFired()
 {
-	if (TimerCount < MaxTimerCount)
+	if (++TimerCount < MaxTimerCount)
 	{
 		const FLinearColor NewColor = FLinearColor::MakeRandomColor();
 		UE_LOG(LogBaseGeometry, Display, TEXT("TimerCount: %i, Color to set up: %s"), TimerCount, *NewColor.ToString());
 		SetColor(NewColor);
-		++TimerCount;
 	}
 	else
 	{

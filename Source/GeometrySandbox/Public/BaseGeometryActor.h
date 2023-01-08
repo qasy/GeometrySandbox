@@ -24,7 +24,7 @@ struct FGeometryData
 	float Amplitude = 50.0f;
 
 	UPROPERTY(EditAnywhere, Category = "Movement")
-	float Frequency = 50.0f;
+	float Frequency = 5.0f;
 
 	UPROPERTY(EditAnywhere, Category = "Movement")
 	EMovementType MoveType = EMovementType::Static;
@@ -48,6 +48,11 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* BaseMesh; 
+
+	void SetGeometryData(const FGeometryData& Data)
+	{
+		GeometryData = Data;
+	}
 
 protected:
 	// Called when the game starts or when spawned

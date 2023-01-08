@@ -2,6 +2,7 @@
 
 
 #include "GeometryHubActor.h"
+#include "Engine/World.h"
 
 // Sets default values
 AGeometryHubActor::AGeometryHubActor()
@@ -15,14 +16,42 @@ AGeometryHubActor::AGeometryHubActor()
 void AGeometryHubActor::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 	UWorld* World = GetWorld();
 	if (World)
 	{
 		World->SpawnActor(GeometryClass);
 
-	}
-	
+		// SPAWN TYPE 1: Me, try to spawn N object with other transform
+		for (int32 i = 0; i < 5; ++i)
+		{
+			const FTransform Transform = FTransform(FRotator::ZeroRotator, FVector(0.0f, 200.0f + 200.0f*i, 0.0f));
+			ABaseGeometryActor* BaseGeometryActor = World->SpawnActor<ABaseGeometryActor>(GeometryClass, Transform);
+
+			if (BaseGeometryActor) 
+			{
+				FGeometryData Data;
+				Data.MoveType = (FMath::RandBool()) ? EMovementType::Sin : EMovementType::Static;
+				BaseGeometryActor->SetGeometryData(Data);
+			}
+		}
+
+		// SPAWN TYPE 2: Me, try to spawn N object with other transform 
+		for (int32 i = 0; i < 5; ++i)
+		{
+			const FTransform Transform = FTransform(FRotator::ZeroRotator, FVector(0.0f, 200.0f + 200.0f * i, 500.0f));
+			ABaseGeometryActor* BaseGeometryActor = World->SpawnActorDeferred<ABaseGeometryActor>(GeometryClass, Transform);
+
+			if (BaseGeometryActor)
+			{
+				FGeometryData Data;
+				Data.Color = FLinearColor::MakeRandomColor();
+				Data.MoveType = (FMath::RandBool()) ? EMovementType::Sin : EMovementType::Static;
+				BaseGeometryActor->SetGeometryData(Data);
+				BaseGeometryActor->FinishSpawning(Transform);
+			}
+		}
+	}	
 }
 
 // Called every frame
