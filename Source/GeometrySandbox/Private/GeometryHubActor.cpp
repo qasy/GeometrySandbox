@@ -4,6 +4,8 @@
 #include "GeometryHubActor.h"
 #include "Engine/World.h"
 
+DEFINE_LOG_CATEGORY_STATIC(LogGeometryHub, All, All)
+
 // Sets default values
 AGeometryHubActor::AGeometryHubActor()
 {
@@ -16,9 +18,10 @@ AGeometryHubActor::AGeometryHubActor()
 void AGeometryHubActor::BeginPlay()
 {
 	Super::BeginPlay();
-	DoActorSpawn1();
-	DoActorSpawn2();
+	//DoActorSpawn1();
+	//DoActorSpawn2();
 	DoActorSpawn3();	
+
 		
 }
 
@@ -87,9 +90,29 @@ void AGeometryHubActor::DoActorSpawn3()
 			if (BaseGeometryActor)
 			{
 				BaseGeometryActor->SetGeometryData(Payload.Data);
+				BaseGeometryActor->OnColorChanged.AddDynamic(this, &AGeometryHubActor::OnColorChanged);
+				BaseGeometryActor->OnTimerFinished.AddUObject(this, &AGeometryHubActor::OnTimerFinished);
 				BaseGeometryActor->FinishSpawning(Payload.InitialTransform);
 			}
 		}
 	}
+}
+
+void AGeometryHubActor::OnColorChanged(const FLinearColor& Color, const FString& Name)
+{
+	UE_LOG(LogGeometryHub, Warning, TEXT("Actor name: %s Color: %s"), *Name, *Color.ToString());
+}
+
+void AGeometryHubActor::OnTimerFinished(AActor* Actor)
+{
+	if (!Actor) { return; }
+	
+	UE_LOG(LogGeometryHub, Error, TEXT("Timer finished: %s"), *Actor->GetName());
+
+	ABaseGeometryActor* Geometry = Cast<ABaseGeometryActor>(Actor);
+	if (!Geometry) { return; }
+
+	UE_LOG(LogGeometryHub, Display, TEXT("Cast is success, amplitude %f"), Geometry->GetGeometryData().Amplitude);
+	Geometry->Destroy();	
 }
 
