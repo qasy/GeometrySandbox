@@ -71,8 +71,11 @@ void ABaseGeometryActor::PrintStringTypes()
 	FString Stat = FString::Printf(TEXT("\n  == All Stat == \n %s \n %s \n %s"), *WeaponsNumStr, *HealthStr, *IsDeadStr);
 	UE_LOG(LogBaseGeometry, Warning, TEXT("%s"), *Stat);
 
-	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, Name);
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Emerald, Stat, true, FVector2D(1.5f, 1.5f));
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, Name);
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Emerald, Stat, true, FVector2D(1.5f, 1.5f));
+	}
 
 }
 
@@ -100,15 +103,18 @@ void ABaseGeometryActor::HandleMovement()
 		case EMovementType::Sin:
 		{
 			FVector CurrentLocation = GetActorLocation();
-			FVector CurrentScale3D = GetActorScale3D();
+			FVector CurrentScale3D = GetActorScale3D();			
 
-			float Time = GetWorld()->GetTimeSeconds();
+			if(GetWorld())
+			{
+				float Time = GetWorld()->GetTimeSeconds();
+				
+				CurrentLocation.Z = InitialLocation.Z + GeometryData.Amplitude * FMath::Sin(GeometryData.Frequency * Time);
+				// CurrentScale3D = InitialScale3D + (GeometryData.Amplitude / 10.0f) * FMath::Cos((GeometryData.Frequency / 10.0f) * Time);
 
-			CurrentLocation.Z = InitialLocation.Z + GeometryData.Amplitude * FMath::Sin(GeometryData.Frequency * Time);
-			// CurrentScale3D = InitialScale3D + (GeometryData.Amplitude / 10.0f) * FMath::Cos((GeometryData.Frequency / 10.0f) * Time);
-
-			SetActorLocation(CurrentLocation);
-			// SetActorScale3D(CurrentScale3D);
+				SetActorLocation(CurrentLocation);
+				// SetActorScale3D(CurrentScale3D);
+			}			
 		}
 		break;
 
@@ -120,12 +126,15 @@ void ABaseGeometryActor::HandleMovement()
 
 void ABaseGeometryActor::SetColor(const FLinearColor& Color)
 {
-	UMaterialInstanceDynamic* DynMaterial = BaseMesh->CreateAndSetMaterialInstanceDynamic(0);
-
-	if (DynMaterial)
+	if(BaseMesh)
 	{
-		DynMaterial->SetVectorParameterValue("Color", Color);
-	}
+		UMaterialInstanceDynamic* DynMaterial = BaseMesh->CreateAndSetMaterialInstanceDynamic(0);
+
+		if (DynMaterial)
+		{
+			DynMaterial->SetVectorParameterValue("Color", Color);
+		}
+	}	
 }
 
 void ABaseGeometryActor::OnTimerFired()
