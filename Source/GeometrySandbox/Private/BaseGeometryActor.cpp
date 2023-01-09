@@ -157,6 +157,14 @@ void ABaseGeometryActor::OnTimerFired()
 		UE_LOG(LogBaseGeometry, Warning, TEXT("Timer has benn stopped!"));
 		GetWorldTimerManager().ClearTimer(TimerHandle);
 		OnTimerFinished.Broadcast(this);
+		if (OnTimerFinished.IsBound())
+		{
+			UE_LOG(LogBaseGeometry, Error, TEXT("OnTimerFinished IS BOUND!"));
+		}
+		else
+		{
+			UE_LOG(LogBaseGeometry, Error, TEXT("OnTimerFinished IS NOT BOUND!"));
+		}
 	}
 	
 }
