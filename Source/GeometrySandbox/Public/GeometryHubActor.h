@@ -7,6 +7,7 @@
 #include "BaseGeometryActor.h"
 #include "GeometryHubActor.generated.h"
 
+
 USTRUCT(BlueprintType)
 struct FGeometryPayload
 {
@@ -37,16 +38,19 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere)
-	UClass* Class;
-
-	UPROPERTY(EditAnywhere)
-	ABaseGeometryActor* GeometryObject;
-
-	UPROPERTY(EditAnywhere)
 	TArray<FGeometryPayload> GeometryPayloads;
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+private:
+	void DoActorSpawn1();
+	void DoActorSpawn2();
+	void DoActorSpawn3();
+
+	UFUNCTION()
+	void OnColorChanged(const FLinearColor& Color, const FString& Name);
+	void OnTimerFinished(AActor* Actor);
 
 };
