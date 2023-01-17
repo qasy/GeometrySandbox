@@ -51,6 +51,18 @@ void AGeometryHubActor::BeginPlay()
 				BaseGeometryActor->FinishSpawning(Transform);
 			}
 		}
+
+		for (const FGeometryPayload &Payload : GeometryPayloads)
+		{
+			ABaseGeometryActor* BaseGeometryActor = World->SpawnActorDeferred<ABaseGeometryActor>(Payload.GeometryClass, Payload.InitialTransform);
+
+			if (BaseGeometryActor)
+			{
+				BaseGeometryActor->SetGeometryData(Payload.Data);
+				BaseGeometryActor->FinishSpawning(Payload.InitialTransform);
+			}
+
+		}
 	}	
 }
 

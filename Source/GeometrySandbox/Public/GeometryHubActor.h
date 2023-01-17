@@ -7,6 +7,22 @@
 #include "BaseGeometryActor.h"
 #include "GeometryHubActor.generated.h"
 
+USTRUCT(BlueprintType)
+struct FGeometryPayload
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<ABaseGeometryActor> GeometryClass;
+
+	UPROPERTY(EditAnywhere)
+	FGeometryData Data;
+
+	UPROPERTY(EditAnywhere)
+	FTransform InitialTransform;
+
+};
+
 UCLASS()
 class GEOMETRYSANDBOX_API AGeometryHubActor : public AActor
 {
@@ -21,13 +37,13 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<ABaseGeometryActor> GeometryClass;
-
-	UPROPERTY(EditAnywhere)
 	UClass* Class;
 
 	UPROPERTY(EditAnywhere)
 	ABaseGeometryActor* GeometryObject;
+
+	UPROPERTY(EditAnywhere)
+	TArray<FGeometryPayload> GeometryPayloads;
 
 public:	
 	// Called every frame
