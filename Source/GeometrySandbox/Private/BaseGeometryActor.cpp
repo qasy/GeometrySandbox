@@ -154,7 +154,7 @@ void ABaseGeometryActor::OnTimerFired()
 	}
 	else
 	{
-		UE_LOG(LogBaseGeometry, Warning, TEXT("Timer has benn stopped!"));
+		UE_LOG(LogBaseGeometry, Warning, TEXT("Timer has been stopped!"));
 		GetWorldTimerManager().ClearTimer(TimerHandle);
 		OnTimerFinished.Broadcast(this);
 		if (OnTimerFinished.IsBound())

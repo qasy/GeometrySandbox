@@ -38,6 +38,9 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere)
+	TSubclassOf<ABaseGeometryActor> GeometryClass;
+
+	UPROPERTY(EditAnywhere)
 	TArray<FGeometryPayload> GeometryPayloads;
 
 public:	
