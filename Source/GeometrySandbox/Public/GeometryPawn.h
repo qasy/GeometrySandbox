@@ -6,6 +6,8 @@
 #include "GameFramework/Pawn.h"
 #include "GeometryPawn.generated.h"
 
+class UCameraComponent;
+
 UCLASS()
 class GEOMETRYSANDBOX_API AGeometryPawn : public APawn
 {
@@ -17,6 +19,12 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* SceneComponent;
+
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* StaticMeshComponent;
+
+	UPROPERTY(VisibleAnywhere)
+	UCameraComponent* CameraComponent;
 
 	UPROPERTY(EditAnywhere)
 	float Velocity = 300.0f;
@@ -31,6 +39,9 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	virtual void PossessedBy(AController* NewController) override;
+	virtual void UnPossessed() override;
 
 private:
 

@@ -1,8 +1,10 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ // Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "GeometryPawn.h"
 #include "Components/InputComponent.h"
+#include "Components/StaticMeshComponent.h"
+#include "Camera/CameraComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogGeometryPawn, All, All)
 
@@ -14,6 +16,12 @@ AGeometryPawn::AGeometryPawn()
 
 	SceneComponent = CreateDefaultSubobject<USceneComponent>("SceneComponent");
 	SetRootComponent(SceneComponent);
+
+	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>("StaticMeshComponent");
+	StaticMeshComponent->SetupAttachment(SceneComponent);
+	
+	CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
+	CameraComponent->SetupAttachment(SceneComponent);
 
 }
 
@@ -33,6 +41,7 @@ void AGeometryPawn::Tick(float DeltaTime)
 	{
 		const FVector NewLocation = GetActorLocation() + Velocity * DeltaTime * VelocityVector;
 		SetActorLocation(NewLocation);
+		VelocityVector = FVector::ZeroVector;
 	}
 
 
@@ -44,7 +53,6 @@ void AGeometryPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	PlayerInputComponent->BindAxis("MoveForward", this, &AGeometryPawn::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AGeometryPawn::MoveRight);
-
 }
 
 void AGeometryPawn::MoveForward(float Amount)
@@ -59,3 +67,16 @@ void AGeometryPawn::MoveRight(float Amount)
 	VelocityVector.Y = Amount;
 }
 
+
+void AGeometryPawn::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	UE_LOG(LogGeometryPawn, Error, TEXT("%s possessed by %s"), *GetName(), *NewController->GetName());
+}
+
+void AGeometryPawn::UnPossessed()
+{
+	Super::UnPossessed();
+	UE_LOG(LogGeometryPawn, Warning, TEXT("%s un possessed"), *GetName());
+
+}
